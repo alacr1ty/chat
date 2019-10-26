@@ -17,7 +17,7 @@ from socket import *
 
 
 # connects the client to the server
-def run_server (clientSocket):
+def run_client (clientSocket):
 	# variables
 	msg = ""
 
@@ -36,7 +36,7 @@ def message (message, clientSocket):
 	sentence = input (message)
 	
 	clientSocket.send (sentence.encode ("UTF-8"))
-	message = clientSocket.recv (1024)
+	message = clientSocket.recv (500)
 
 	return (message.decode ("UTF-8"))
 
@@ -51,6 +51,6 @@ def main ():
 	clientSocket = socket (AF_INET, SOCK_STREAM)
 	clientSocket.connect ((serverName,serverPort))
 
-	run_server(clientSocket)
+	run_client(clientSocket)
 
 main()
