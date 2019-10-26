@@ -10,35 +10,48 @@ Description:
 
 """
 
-
-
+# imports
 import sys
 from socket import *
 
 
 
-def client (clientSocket):
-	sentence = input ("Input lowercase sentence:")
-	clientSocket.send (sentence.encode ("UTF-8"))
+# connects the client to the server
+def run_server (clientSocket):
+	# variables
+	msg = ""
 
-	modifiedSentence = clientSocket.recv (1024)
-	print ("From Server:", modifiedSentence.decode ("UTF-8"))
+	# gets user handle and configs prompt
+	handle = message ("Enter handle: ", clientSocket)
+	prompt = (handle + "> ")
+
+	# continuously prompt for a message until the message is "\quit"
+	while msg is not "\\quit":
+		msg = message (prompt, clientSocket)
+		print (msg)
 
 	clientSocket.close()
 
+def message (message, clientSocket):
+	sentence = input (message)
+	clientSocket.send (sentence.encode ("UTF-8"))
+
+	message = clientSocket.recv (1024)
+	return (message.decode ("UTF-8"))
+
 def main ():
-	print (sys.argv)
+	# print (sys.argv)
 
 	if len(sys.argv) != 3:
-		print ("error: incorrect usage (chatclient.py serverport).")
+		print ("Error: Incorrect usage (chatclient.py serverport).")
 		exit(1)
 
 	serverName = sys.argv[1]
-	serverPort = int(sys.argv[2])
+	serverPort = int (sys.argv[2])
 
 	clientSocket = socket (AF_INET, SOCK_STREAM)
 	clientSocket.connect ((serverName,serverPort))
 
-	client(clientSocket)
+	run_server(clientSocket)
 
 main()
