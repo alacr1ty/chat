@@ -31,7 +31,7 @@ def run_client (clientSocket):
 		# print ("msg:", loc_msg)
 		if loc_msg == "\\quit":
 			print ("Connection closing...")
-			clientSocket.close()
+			# clientSocket.close() # this line may not be necessary
 			print ("Connection closed...")
 			exit(0)
 
