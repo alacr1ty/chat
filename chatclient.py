@@ -26,22 +26,21 @@ def run_server (clientSocket):
 	prompt = (handle + "> ")
 
 	# continuously prompt for a message until the message is "\quit"
-	while msg is not "\\quit":
+	while msg != "\\quit":
 		msg = message (prompt, clientSocket)
-		print (msg)
+		# print ("msg:", msg)
 
 	clientSocket.close()
 
 def message (message, clientSocket):
 	sentence = input (message)
+	
 	clientSocket.send (sentence.encode ("UTF-8"))
-
 	message = clientSocket.recv (1024)
+
 	return (message.decode ("UTF-8"))
 
 def main ():
-	# print (sys.argv)
-
 	if len(sys.argv) != 3:
 		print ("Error: Incorrect usage (chatclient.py serverport).")
 		exit(1)

@@ -17,15 +17,13 @@ from socket import *
 def server (serverSocket):
 	sentence = ""
 
-	while sentence is not "\\quit":
+	connectionSocket, addr = serverSocket.accept()
 
-### BUG HERE!!!
-
-		connectionSocket, addr = serverSocket.accept()
+	while sentence != "\\quit":
 		sentence = connectionSocket.recv (1024)
 		sentence_str = sentence.decode ("UTF-8")
 
-		print (sentence_str)
+		print ("sentence:", sentence_str)
 
 		connectionSocket.send (sentence)
 
