@@ -26,11 +26,14 @@ def run_client (clientSocket):
 	prompt = (handle + "> ")
 
 	# continuously prompt for a message until the message is "\quit"
-	while msg != "\\quit":
-		msg = message (prompt, clientSocket)
-		# print ("msg:", msg)
-
-	clientSocket.close()
+	while 1:
+		msg = loc_msg = message (prompt, clientSocket)
+		print ("msg:", loc_msg)
+		if loc_msg == "\\quit":
+			print ("Connection closing...")
+			clientSocket.close()
+			print ("Connection closed...")
+			exit(0)
 
 def message (message, clientSocket):
 	sentence = input (message)
