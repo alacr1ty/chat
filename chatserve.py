@@ -14,14 +14,13 @@ import signal
 import sys
 from socket import *
 
-def server (serverPort, serverSocket):
+# starts and maintains the server functionality
+def start_server (serverPort, serverSocket):
 	sentence = ""
 
 	# always
 	while 1:
 		# listen for a connection
-		# serverSocket = socket (AF_INET,SOCK_STREAM)
-		# serverSocket.bind (("",serverPort))
 		print ("Listening for a connection...")
 		serverSocket.listen (1)
 		connectionSocket, addr = serverSocket.accept()
@@ -34,7 +33,7 @@ def server (serverPort, serverSocket):
 			sentence = connectionSocket.recv (500)
 			sentence_str = sentence.decode ("UTF-8")
 
-			print ("sentence:", sentence_str)
+			# print ("sentence:", sentence_str)
 
 			# send message back to client
 			connectionSocket.send (sentence)
@@ -46,12 +45,12 @@ def server (serverPort, serverSocket):
 				print ("Connection closed...")
 				break
 
-
+# signal handler function
 def sig_handle(sig, frame):
 	sys.exit(0)
 
 
-
+# main function
 def main ():
 	if len(sys.argv) != 2:
 		print ("Error: Incorrect usage (chatserve.py serverport).")
@@ -60,11 +59,10 @@ def main ():
 	serverPort = int(sys.argv[1])
 	serverSocket = socket (AF_INET,SOCK_STREAM)
 	serverSocket.bind (("",serverPort))
-	serverSocket.listen (1)
 
 	print ("Chat server standing by on port", serverPort, "...")
 
-	server (serverPort, serverSocket)
+	start_server (serverPort, serverSocket)
 
 	
 signal.signal(signal.SIGINT, sig_handle)
