@@ -10,6 +10,7 @@ Description:
 
 """
 
+# imports
 import signal
 import sys
 from socket import *
@@ -30,7 +31,7 @@ def start_server (serverPort, serverSocket):
 		while 1:
 			
 			# receive and decode message
-			sentence = connectionSocket.recv (500)
+			sentence = connectionSocket.recv (1024)
 			sentence_str = sentence.decode ("UTF-8")
 
 			# print ("sentence:", sentence_str)
@@ -41,7 +42,7 @@ def start_server (serverPort, serverSocket):
 			if sentence_str == "\\quit":
 				# close connection to client
 				print ("Connection closing...")
-				connectionSocket.close()
+				connectionSocket.close() # close connection
 				print ("Connection closed...")
 				break
 
@@ -52,20 +53,22 @@ def sig_handle(sig, frame):
 
 # main function
 def main ():
+	# check that usage is correct
 	if len(sys.argv) != 2:
 		print ("Error: Incorrect usage (chatserve.py serverport).")
 		sys.exit(1)
 	
-	serverPort = int(sys.argv[1])
-	serverSocket = socket (AF_INET,SOCK_STREAM)
-	serverSocket.bind (("",serverPort))
+	# assign server port and socket
+	serverPort = int(sys.argv[1]) # port comes from args
+	serverSocket = socket (AF_INET,SOCK_STREAM) # create socket
+	serverSocket.bind (("",serverPort)) # bind socket to port
 
 	print ("Chat server standing by on port", serverPort, "...")
 
-	start_server (serverPort, serverSocket)
+	start_server (serverPort, serverSocket) # start server
 
-	
+
+# assign signal handler function
 signal.signal(signal.SIGINT, sig_handle)
-# signal.pause()
 
 main()
