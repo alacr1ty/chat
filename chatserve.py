@@ -14,7 +14,7 @@ Description:
 import signal
 import sys
 from socket import *
-from chatlib import config_user
+from chatlib import *
 
 # starts and maintains the server functionality
 def start_server (serverPort, serverSocket):
@@ -25,7 +25,7 @@ def start_server (serverPort, serverSocket):
 	# always
 	while 1:
 		# listen for a connection
-		print ("Listening for a connection on port" + serverPort + "...")
+		print ("Listening for a connection on port " + str(serverPort) + "...")
 		serverSocket.listen (1)
 		connectionSocket, addr = serverSocket.accept()
 		
@@ -36,22 +36,25 @@ def start_server (serverPort, serverSocket):
 		
 		# keep connection open until message is "\quit"
 		while 1:
+
+			run_client_srv (connectionSocket, handle_client, handle_server)
+			run_client (connectionSocket, handle_server, handle_client)
 			
-			# receive and decode message
-			sentence = connectionSocket.recv (1024)
-			sentence_str = sentence.decode ("UTF-8")
+			# # receive and decode message
+			# sentence = connectionSocket.recv (1024)
+			# sentence_str = sentence.decode ("UTF-8")
 
-			# print ("sentence:", sentence_str)
+			# print (handle_client + ">" + sentence_str)
 
-			# send message back to client
-			connectionSocket.send (sentence)
+			# # send message back to client
+			# connectionSocket.send (sentence)
 
-			if sentence_str == "\\quit":
-				# close connection to client
-				print ("Connection closing...")
-				connectionSocket.close() # close connection
-				print ("Connection closed...")
-				break
+			# if sentence_str == "\\quit":
+			# 	# close connection to client
+			# 	print ("Connection closing...")
+			# 	connectionSocket.close() # close connection
+			# 	print ("Connection closed...")
+			# 	break
 
 # signal handler function
 def sig_handle(sig, frame):
