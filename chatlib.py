@@ -16,15 +16,13 @@ from socket import *
 
 
 
-# configures local user variables for messaging system
-# returns tuple: (handle, prompt)
+# configures handle for messaging system
 def config_user ():
 	handle = ""
 	
 	handle = input ("Enter handle (max 10 chars): ")
-	# prompt = (handle + "> ")
 
-	# prompt user for a message that is no longer than the maximum
+	# prompt user for a handle no longer than 10 chars
 	while len(handle) > 10 or len(handle) == 0:
 		handle = input ("Enter handle: ")
 		if len(handle) > 10:
@@ -33,18 +31,18 @@ def config_user ():
 	return handle
 
 
-# # prompt user for message, then send and recv to/from server
-# def message (prompt, clientSocket, message_max):
-# 	sentence = ""
+# prompt user for message, then send and recv to/from server
+def message (prompt, clientSocket, message_max):
+	sentence = ""
 
-# 	# prompt user for a message that is no longer than the maximum
-# 	while len(sentence) > message_max or len(sentence) == 0:
-# 		sentence = input (prompt)
-# 		if len(sentence) > message_max:
-# 			print ("Exceeded maximum characters allowed (" +
-# 				str(message_max) + "), try again.")
+	# prompt user for a message that is no longer than the maximum
+	while len(sentence) > message_max or len(sentence) == 0:
+		sentence = input (prompt)
+		if len(sentence) > message_max:
+			print ("Exceeded maximum characters allowed (" +
+				str(message_max) + "), try again.")
 
-# 	clientSocket.send (sentence.encode ("UTF-8")) # send the message
-# 	prompt = clientSocket.recv (1024) # receive the message back from server
+	clientSocket.send (sentence.encode ("UTF-8")) # send the message
+	prompt = clientSocket.recv (1024) # receive the message back from server
 
-# 	return (prompt.decode ("UTF-8")) # must be UTF-8
+	return (prompt.decode ("UTF-8")) # must be UTF-8

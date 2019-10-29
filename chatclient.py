@@ -17,7 +17,6 @@ from chatlib import config_user
 
 
 
-
 # prompt user for message, then send and recv to/from server
 def message (prompt, clientSocket, message_max):
 	sentence = ""
@@ -36,16 +35,13 @@ def message (prompt, clientSocket, message_max):
 
 # connects the client to the server and maintains the chat functionality
 def run_client (clientSocket, handle):
-
 	prompt = handle+">"
 
 	# continuously prompt for a message until the message is "\quit"
 	msg = ""
 	while 1:
-		msg = loc_msg = message (prompt, clientSocket, 500)
-		if loc_msg == "\\quit": # if message is "\quit", close the connection
-			print ("Connection closing...")
-			clientSocket.close() # close the connection
+		msg = message (prompt, clientSocket, 500)
+		if msg == "\\quit": # if message is "\quit", 
 			print ("Connection closed...")
 			exit(0)
 
@@ -64,17 +60,21 @@ def main ():
 	print ("Chat client starting ...")
 
 	# gets user handle
-	handle = config_user()
+	handle_client = config_user()
 
 # try:
 	# connect to the server
 	clientSocket = socket (AF_INET, SOCK_STREAM) # create TCP socket
 	clientSocket.connect ((serverName,serverPort)) # connect to server
-	print ("Chat client connected to", serverName, "on port", serverPort, "...")
+
+	clientSocket.send(handle_client.encode ("UTF-8")) # send handle to server
+	handle_server = clientSocket.recv (10).decode ("UTF-8")
+
+	print ("Chat client connected to '" + handle_server + "' on server '" + serverName + "' on port " + str(serverPort) + "...")
 # except:
 # 	print ("Could not connect to server", serverName, "on port", serverPort, "...")
 # 	exit(1)
 
-	run_client(clientSocket, handle) # run client
+	run_client(clientSocket, handle_client) # run client
 
 main()

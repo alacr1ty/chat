@@ -20,15 +20,19 @@ from chatlib import config_user
 def start_server (serverPort, serverSocket):
 	# sentence = ""
 
-	handle = config_user()
+	handle_server = config_user()
 
 	# always
 	while 1:
 		# listen for a connection
-		print ("Listening for a connection on port", serverPort, "...")
+		print ("Listening for a connection on port" + serverPort + "...")
 		serverSocket.listen (1)
 		connectionSocket, addr = serverSocket.accept()
-		print ("Chat client connected to server on port", serverPort, "...")
+		
+		handle_client = connectionSocket.recv (10).decode ("UTF-8")
+		connectionSocket.send (handle_server.encode ("UTF-8"))
+
+		print ("Chat client " + handle_client + " connected to server on port " + str(serverPort) + "...")
 		
 		# keep connection open until message is "\quit"
 		while 1:
