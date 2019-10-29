@@ -13,26 +13,10 @@ Description:
 # imports
 import sys
 from socket import *
+from chatlib import config_user
 
 
 
-# connects the client to the server and maintains the chat functionality
-def run_client (clientSocket):
-	# variables
-	msg = ""
-
-	# gets user handle and configs prompt
-	handle = message ("Enter handle: ", clientSocket, 10)
-	prompt = (handle + "> ")
-
-	# continuously prompt for a message until the message is "\quit"
-	while 1:
-		msg = loc_msg = message (prompt, clientSocket, 500)
-		if loc_msg == "\\quit": # if message is "\quit", close the connection
-			print ("Connection closing...")
-			clientSocket.close() # close the connection
-			print ("Connection closed...")
-			exit(0)
 
 # prompt user for message, then send and recv to/from server
 def message (prompt, clientSocket, message_max):
@@ -50,6 +34,22 @@ def message (prompt, clientSocket, message_max):
 
 	return (prompt.decode ("UTF-8")) # must be UTF-8
 
+# connects the client to the server and maintains the chat functionality
+def run_client (clientSocket, handle):
+
+	prompt = handle+">"
+
+	# continuously prompt for a message until the message is "\quit"
+	msg = ""
+	while 1:
+		msg = loc_msg = message (prompt, clientSocket, 500)
+		if loc_msg == "\\quit": # if message is "\quit", close the connection
+			print ("Connection closing...")
+			clientSocket.close() # close the connection
+			print ("Connection closed...")
+			exit(0)
+
+
 
 def main ():
 	# check for proper usage
@@ -61,10 +61,20 @@ def main ():
 	serverName = sys.argv[1]
 	serverPort = int (sys.argv[2])
 
+	print ("Chat client starting ...")
+
+	# gets user handle
+	handle = config_user()
+
+# try:
 	# connect to the server
 	clientSocket = socket (AF_INET, SOCK_STREAM) # create TCP socket
 	clientSocket.connect ((serverName,serverPort)) # connect to server
+	print ("Chat client connected to", serverName, "on port", serverPort, "...")
+# except:
+# 	print ("Could not connect to server", serverName, "on port", serverPort, "...")
+# 	exit(1)
 
-	run_client(clientSocket) # run client
+	run_client(clientSocket, handle) # run client
 
 main()

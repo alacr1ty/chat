@@ -14,15 +14,18 @@ Description:
 import signal
 import sys
 from socket import *
+from chatlib import config_user
 
 # starts and maintains the server functionality
 def start_server (serverPort, serverSocket):
-	sentence = ""
+	# sentence = ""
+
+	handle = config_user()
 
 	# always
 	while 1:
 		# listen for a connection
-		print ("Listening for a connection...")
+		print ("Listening for a connection on port", serverPort, "...")
 		serverSocket.listen (1)
 		connectionSocket, addr = serverSocket.accept()
 		print ("Chat client connected to server on port", serverPort, "...")
@@ -63,7 +66,7 @@ def main ():
 	serverSocket = socket (AF_INET,SOCK_STREAM) # create socket
 	serverSocket.bind (("",serverPort)) # bind socket to port
 
-	print ("Chat server standing by on port", serverPort, "...")
+	print ("Chat server starting ...")
 
 	start_server (serverPort, serverSocket) # start server
 
