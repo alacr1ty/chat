@@ -40,10 +40,10 @@ def start_server (serverPort, serverSocket):
 		while stop is 0:
 
 			stop = run_client_srv (connectionSocket, handle_server, handle_client)
-			if stop is 1:
-				break
+			# if stop is 1:
+			# 	break
 
-			run_client (connectionSocket, handle_server, handle_client, 1)
+			# run_client (connectionSocket, handle_server, handle_client, 1)
 			
 
 
