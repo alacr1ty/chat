@@ -33,14 +33,17 @@ def start_server (serverPort, serverSocket):
 		handle_client = connectionSocket.recv (10).decode ("UTF-8")
 		connectionSocket.send (handle_server.encode ("UTF-8"))
 
-		print ("Chat client " + handle_client + " connected to server on port " + str(serverPort) + "...")
+		print ("Chat client '" + handle_client + "' connected to server on port " + str(serverPort) + "...")
 		
 		# keep connection open until message is "\quit"
-		while 1:
+		stop = 0
+		while stop is 0:
 
-			run_client_srv (connectionSocket, handle_server, handle_client)
+			stop = run_client_srv (connectionSocket, handle_server, handle_client)
+			if stop is 1:
+				break
 
-			run_client (connectionSocket, handle_server, handle_client)
+			run_client (connectionSocket, handle_server, handle_client, 1)
 			
 
 

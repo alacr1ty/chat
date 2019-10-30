@@ -32,26 +32,30 @@ def config_user ():
 
 # prompt user for message, then send and recv to/from server
 def recv_message (clientSocket, prompt):
-	sentence = ""
-
 	# receive the message back from server
 	sentence = clientSocket.recv (1024).decode ("UTF-8")
 
 	return (prompt + sentence) # must be UTF-8
 
 # maintains the chat functionality
-def run_client (clientSocket, handle_cl, handle_srv):
+def run_client (clientSocket, handle_cl, handle_srv, is_srv):
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
 
 	# continuously prompt for a message until the message is "\quit"
-	msg = ""
 	while 1:
 		msg = send_message (clientSocket, prompt_cl, 500)
 		# print ("msg: " + msg)
 		if msg == "\\quit": # if message is "\quit", 
-			print ("Connection closed...")
-			exit(0)
+			if is_srv is 1:
+			 	# close connection to client
+				print ("Connection closing...")
+				connectionSocket.close() # close connection
+				print ("Connection closed...")
+				return 1
+			else:
+				print ("Connection closed...")
+				exit(0)
 		msg = recv_message (clientSocket, prompt_srv)
 		print (msg)
 
@@ -59,7 +63,6 @@ def run_client (clientSocket, handle_cl, handle_srv):
 def run_client_srv (connectionSocket, handle_srv, handle_cl):
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
-
 	# # receive and decode message
 	# sentence = connectionSocket.recv (1024)
 	# sentence_str = sentence.decode ("UTF-8")
@@ -70,16 +73,18 @@ def run_client_srv (connectionSocket, handle_srv, handle_cl):
 	# connectionSocket.send (sentence)
 
 	# continuously prompt for a message until the message is "\quit"
-	msg = ""
 	while 1:
 		msg = recv_message (connectionSocket, prompt_cl)
 		print (msg)
-		if msg == "\\quit": # if message is "\quit", 
+		if msg == prompt_cl + "\\quit": # if message is "\quit", 
 		 	# close connection to client
 			print ("Connection closing...")
 			connectionSocket.close() # close connection
 			print ("Connection closed...")
+			return 1
 		msg = send_message (connectionSocket, prompt_srv, 500)
+
+
 
 # prompt user for message, then send and recv to/from server
 def send_message (clientSocket, prompt, message_max):

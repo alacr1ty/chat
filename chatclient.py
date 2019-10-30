@@ -57,7 +57,7 @@ def main ():
 	(clientSocket, handle_server) = conx_user()
 
 	# run the chat client
-	run_client (clientSocket, handle_client, handle_server) 
+	run_client (clientSocket, handle_client, handle_server, 0) 
 
 
 # assign signal handler function
