@@ -11,19 +11,38 @@ Description:
 """
 
 # imports
+import signal
 import sys
 from socket import *
+
 from chatlib import *
 
 
+def conx_user(): # (serverName, serverPort, handle_client):
+# try:
+	# connect to the server
+	clientSocket = socket (AF_INET, SOCK_STREAM) # create TCP socket
+	clientSocket.connect ((serverName,serverPort)) # connect to server
 
+	# servers share handles
+	clientSocket.send(handle_client.encode ("UTF-8")) 
+	handle_server = clientSocket.recv (10).decode ("UTF-8")
 
+	print ("Chat client connected to '" + handle_server + "' on server '" + serverName + "' on port " + str(serverPort) + "...")
+
+	return (clientSocket, handle_server)
 
 def main ():
 	# check for proper usage
 	if len(sys.argv) != 3:
 		print ("Error: Incorrect usage (chatclient.py serverport).")
 		exit(1)
+
+	global serverName
+	global serverPort
+	global clientSocket
+	global handle_server
+	global handle_client
 
 	# assign host and port from args
 	serverName = sys.argv[1]
@@ -34,19 +53,14 @@ def main ():
 	# gets client user handle
 	handle_client = config_user()
 
-# try:
-	# connect to the server
-	clientSocket = socket (AF_INET, SOCK_STREAM) # create TCP socket
-	clientSocket.connect ((serverName,serverPort)) # connect to server
+	# connects to the server, sets 
+	(clientSocket, handle_server) = conx_user()
 
-	clientSocket.send(handle_client.encode ("UTF-8")) # send handle to server
-	handle_server = clientSocket.recv (10).decode ("UTF-8")
+	# run the chat client
+	run_client (clientSocket, handle_client, handle_server) 
 
-	print ("Chat client connected to '" + handle_server + "' on server '" + serverName + "' on port " + str(serverPort) + "...")
-# except:
-# 	print ("Could not connect to server", serverName, "on port", serverPort, "...")
-# 	exit(1)
 
-	run_client (clientSocket, handle_client, handle_server) # run client
+# assign signal handler function
+signal.signal(signal.SIGINT, sig_handle)
 
 main()

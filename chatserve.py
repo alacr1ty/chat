@@ -14,6 +14,7 @@ Description:
 import signal
 import sys
 from socket import *
+
 from chatlib import *
 
 # starts and maintains the server functionality
@@ -37,28 +38,11 @@ def start_server (serverPort, serverSocket):
 		# keep connection open until message is "\quit"
 		while 1:
 
-			run_client_srv (connectionSocket, handle_client, handle_server)
+			run_client_srv (connectionSocket, handle_server, handle_client)
+
 			run_client (connectionSocket, handle_server, handle_client)
 			
-			# # receive and decode message
-			# sentence = connectionSocket.recv (1024)
-			# sentence_str = sentence.decode ("UTF-8")
 
-			# print (handle_client + ">" + sentence_str)
-
-			# # send message back to client
-			# connectionSocket.send (sentence)
-
-			# if sentence_str == "\\quit":
-			# 	# close connection to client
-			# 	print ("Connection closing...")
-			# 	connectionSocket.close() # close connection
-			# 	print ("Connection closed...")
-			# 	break
-
-# signal handler function
-def sig_handle(sig, frame):
-	sys.exit(0)
 
 
 # main function
