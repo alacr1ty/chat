@@ -60,26 +60,26 @@ def run_client (client_socket, handle_cl, handle_srv, is_srv):
 			exit(0)
 
 # maintains the server-side chat functionality
-def run_client_srv (connectionSocket, handle_srv, handle_cl):
+def run_client_srv (connection_socket, handle_srv, handle_cl):
 	# set prompts
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
 
 	# keep prompting until the message is "\quit"
 	while 1:
-		msg = recv_message (connectionSocket, prompt_cl)
+		msg = recv_message (connection_socket, prompt_cl)
 		print (msg)
 		if msg == prompt_cl + "\\quit": # if message is "\quit"
 		 	# close connection to client
 			print ("Connection closing...")
-			connectionSocket.close() # close connection
+			connection_socket.close() # close connection
 			print ("Connection closed...")
 			return 1
-		msg = send_message (connectionSocket, prompt_srv, 500)
+		msg = send_message (connection_socket, prompt_srv, 500)
 		if msg == "\\quit": # if message is "\quit"
 		 	# close connection to client
 			print ("Connection closing...")
-			connectionSocket.close() # close connection
+			connection_socket.close() # close connection
 			print ("Connection closed...")
 			return 1
 

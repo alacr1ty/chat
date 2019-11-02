@@ -28,10 +28,10 @@ def start_server (server_port, server_socket):
 		# listen for a connection
 		print ("Listening for a connection on port " + str(server_port) + "...")
 		server_socket.listen (1) # wait for an incoming connection
-		connectionSocket, addr = server_socket.accept() # accept and get socket info
+		connection_socket, addr = server_socket.accept() # accept and get socket info
 		
-		handle_client = connectionSocket.recv (10).decode ("UTF-8") # get the incoming user handle
-		connectionSocket.send (handle_server.encode ("UTF-8")) # send the local user handle
+		handle_client = connection_socket.recv (10).decode ("UTF-8") # get the incoming user handle
+		connection_socket.send (handle_server.encode ("UTF-8")) # send the local user handle
 
 		print ("Chat client '" + handle_client + "' connected to server on port " + str(server_port) + "...")
 		
@@ -39,7 +39,7 @@ def start_server (server_port, server_socket):
 		stop = 0
 		while stop is 0:
 
-			stop = run_client_srv (connectionSocket, handle_server, handle_client) # run the server-based client
+			stop = run_client_srv (connection_socket, handle_server, handle_client) # run the server-based client
 
 
 # main function
