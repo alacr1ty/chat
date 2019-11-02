@@ -4,6 +4,7 @@
 Program: chatclient.py
 	Written by: Ava Cordero
 	Date: 10/25/2019
+	Latest: 11/1/2019
 
 Description:
 	Library for a simple chat client that works for one pair of users.
@@ -70,7 +71,7 @@ def run_client_srv (connectionSocket, handle_srv, handle_cl):
 	# # send message back to client
 	# connectionSocket.send (sentence)
 
-	# continuously prompt for a message until the message is "\quit"
+	# keep prompting until the message is "\quit"
 	while 1:
 		msg = recv_message (connectionSocket, prompt_cl)
 		print (msg)

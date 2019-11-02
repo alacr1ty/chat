@@ -4,6 +4,7 @@
 Program: chatserve.py
 	Written by: Ava Cordero
 	Date: 10/25/2019
+	Latest: 11/1/2019
 
 Description:
 	A simple chat server that works for one pair of users.
@@ -27,8 +28,8 @@ def start_server (serverPort, serverSocket):
 	while 1:
 		# listen for a connection
 		print ("Listening for a connection on port " + str(serverPort) + "...")
-		serverSocket.listen (1)
-		connectionSocket, addr = serverSocket.accept()
+		serverSocket.listen (1) # wait for an incoming connection
+		connectionSocket, addr = serverSocket.accept() # accept and get socket info
 		
 		handle_client = connectionSocket.recv (10).decode ("UTF-8")
 		connectionSocket.send (handle_server.encode ("UTF-8"))

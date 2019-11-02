@@ -4,10 +4,12 @@
 Program: chatclient.py
 	Written by: Ava Cordero
 	Date: 10/25/2019
+	Latest:11/1/2019
 
 Description:
 	A simple chat client that works for one pair of users.
 
+Usage: chatclient.py servername portnumber
 """
 
 # imports
@@ -35,7 +37,7 @@ def conx_user(): # (serverName, serverPort, handle_client):
 def main ():
 	# check for proper usage
 	if len(sys.argv) != 3:
-		print ("Error: Incorrect usage (chatclient.py serverport).")
+		print ("Error: Incorrect usage (chatclient.py servername portnumber).")
 		exit(1)
 
 	global serverName
