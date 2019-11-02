@@ -15,7 +15,6 @@ Description:
 import signal
 import sys
 from socket import *
-
 from chatlib import *
 
 # starts and maintains the server functionality
@@ -31,8 +30,8 @@ def start_server (serverPort, serverSocket):
 		serverSocket.listen (1) # wait for an incoming connection
 		connectionSocket, addr = serverSocket.accept() # accept and get socket info
 		
-		handle_client = connectionSocket.recv (10).decode ("UTF-8")
-		connectionSocket.send (handle_server.encode ("UTF-8"))
+		handle_client = connectionSocket.recv (10).decode ("UTF-8") # get the incoming user handle
+		connectionSocket.send (handle_server.encode ("UTF-8")) # send the local user handle
 
 		print ("Chat client '" + handle_client + "' connected to server on port " + str(serverPort) + "...")
 		
@@ -40,13 +39,7 @@ def start_server (serverPort, serverSocket):
 		stop = 0
 		while stop is 0:
 
-			stop = run_client_srv (connectionSocket, handle_server, handle_client)
-			# if stop is 1:
-			# 	break
-
-			# run_client (connectionSocket, handle_server, handle_client, 1)
-			
-
+			stop = run_client_srv (connectionSocket, handle_server, handle_client) # run the server-based client
 
 
 # main function

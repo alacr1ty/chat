@@ -38,8 +38,9 @@ def recv_message (clientSocket, prompt):
 
 	return (prompt + sentence) # must be UTF-8
 
-# maintains the chat functionality
+# maintains the client chat functionality
 def run_client (clientSocket, handle_cl, handle_srv, is_srv):
+	# set prompts
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
 
@@ -58,18 +59,11 @@ def run_client (clientSocket, handle_cl, handle_srv, is_srv):
 			print ("Connection closed...")
 			exit(0)
 
-# maintains the chat functionality
+# maintains the server-side chat functionality
 def run_client_srv (connectionSocket, handle_srv, handle_cl):
+	# set prompts
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
-	# # receive and decode message
-	# sentence = connectionSocket.recv (1024)
-	# sentence_str = sentence.decode ("UTF-8")
-
-	# print (handle_client + ">" + sentence_str)
-
-	# # send message back to client
-	# connectionSocket.send (sentence)
 
 	# keep prompting until the message is "\quit"
 	while 1:

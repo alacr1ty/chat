@@ -16,7 +16,6 @@ Usage: chatclient.py servername portnumber
 import signal
 import sys
 from socket import *
-
 from chatlib import *
 
 
@@ -32,7 +31,9 @@ def conx_user(): # (serverName, serverPort, handle_client):
 
 	print ("Chat client connected to '" + handle_server + "' on server '" + serverName + "' on port " + str(serverPort) + "...")
 
+	# returns a tuple: the socket, and the other handle
 	return (clientSocket, handle_server)
+
 
 def main ():
 	# check for proper usage
@@ -40,6 +41,7 @@ def main ():
 		print ("Error: Incorrect usage (chatclient.py servername portnumber).")
 		exit(1)
 
+	# declare globals cause you're gonna need them
 	global serverName
 	global serverPort
 	global clientSocket
@@ -55,7 +57,7 @@ def main ():
 	# gets client user handle
 	handle_client = config_user()
 
-	# connects to the server, sets 
+	# connects to the server, gets socket and handle
 	(clientSocket, handle_server) = conx_user()
 
 	# run the chat client
