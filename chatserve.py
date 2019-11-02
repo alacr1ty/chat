@@ -18,7 +18,7 @@ from socket import *
 from chatlib import *
 
 # starts and maintains the server functionality
-def start_server (serverPort, serverSocket):
+def start_server (server_port, server_socket):
 	# sentence = ""
 
 	handle_server = config_user()
@@ -26,14 +26,14 @@ def start_server (serverPort, serverSocket):
 	# always
 	while 1:
 		# listen for a connection
-		print ("Listening for a connection on port " + str(serverPort) + "...")
-		serverSocket.listen (1) # wait for an incoming connection
-		connectionSocket, addr = serverSocket.accept() # accept and get socket info
+		print ("Listening for a connection on port " + str(server_port) + "...")
+		server_socket.listen (1) # wait for an incoming connection
+		connectionSocket, addr = server_socket.accept() # accept and get socket info
 		
 		handle_client = connectionSocket.recv (10).decode ("UTF-8") # get the incoming user handle
 		connectionSocket.send (handle_server.encode ("UTF-8")) # send the local user handle
 
-		print ("Chat client '" + handle_client + "' connected to server on port " + str(serverPort) + "...")
+		print ("Chat client '" + handle_client + "' connected to server on port " + str(server_port) + "...")
 		
 		# keep connection open until message is "\quit"
 		stop = 0
@@ -50,13 +50,13 @@ def main ():
 		sys.exit(1)
 	
 	# assign server port and socket
-	serverPort = int(sys.argv[1]) # port comes from args
-	serverSocket = socket (AF_INET,SOCK_STREAM) # create socket
-	serverSocket.bind (("",serverPort)) # bind socket to port
+	server_port = int(sys.argv[1]) # port comes from args
+	server_socket = socket (AF_INET,SOCK_STREAM) # create socket
+	server_socket.bind (("",server_port)) # bind socket to port
 
 	print ("Chat server starting ...")
 
-	start_server (serverPort, serverSocket) # start server
+	start_server (server_port, server_socket) # start server
 
 
 # assign signal handler function

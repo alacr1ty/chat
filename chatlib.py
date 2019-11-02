@@ -32,27 +32,27 @@ def config_user ():
 	return handle
 
 # prompt user for message, then send and recv to/from server
-def recv_message (clientSocket, prompt):
+def recv_message (client_socket, prompt):
 	# receive the message back from server
-	sentence = clientSocket.recv (1024).decode ("UTF-8")
+	sentence = client_socket.recv (1024).decode ("UTF-8")
 
 	return (prompt + sentence) # must be UTF-8
 
 # maintains the client chat functionality
-def run_client (clientSocket, handle_cl, handle_srv, is_srv):
+def run_client (client_socket, handle_cl, handle_srv, is_srv):
 	# set prompts
 	prompt_srv = handle_srv + "> "
 	prompt_cl = handle_cl + "> "
 
 	# continuously prompt for a message until the message is "\quit"
 	while 1:
-		msg = send_message (clientSocket, prompt_cl, 500)
+		msg = send_message (client_socket, prompt_cl, 500)
 		
 		if msg == "\\quit": # if message is "\quit", 
 			print ("Connection closed...")
 			exit(0)
 		
-		msg = recv_message (clientSocket, prompt_srv)
+		msg = recv_message (client_socket, prompt_srv)
 		print (msg)
 
 		if msg == prompt_srv + "\\quit": # if message is "\quit", 
@@ -84,7 +84,7 @@ def run_client_srv (connectionSocket, handle_srv, handle_cl):
 			return 1
 
 # prompt user for message, then send and recv to/from server
-def send_message (clientSocket, prompt, message_max):
+def send_message (client_socket, prompt, message_max):
 	sentence = ""
 
 	# prompt user for a message that is no longer than the maximum
@@ -94,8 +94,8 @@ def send_message (clientSocket, prompt, message_max):
 			print ("Exceeded maximum characters allowed (" +
 				str(message_max) + "), try again.")
 
-	clientSocket.send (sentence.encode ("UTF-8")) # send the message
-	# prompt = clientSocket.recv (1024) # receive the message back from server
+	client_socket.send (sentence.encode ("UTF-8")) # send the message
+	# prompt = client_socket.recv (1024) # receive the message back from server
 
 	return (sentence) # must be UTF-8
 

@@ -19,20 +19,20 @@ from socket import *
 from chatlib import *
 
 
-def conx_user(): # (serverName, serverPort, handle_client):
+def conx_user(): # (server_name, server_port, handle_client):
 # try:
 	# connect to the server
-	clientSocket = socket (AF_INET, SOCK_STREAM) # create TCP socket
-	clientSocket.connect ((serverName,serverPort)) # connect to server
+	client_socket = socket (AF_INET, SOCK_STREAM) # create TCP socket
+	client_socket.connect ((server_name,server_port)) # connect to server
 
 	# servers share handles
-	clientSocket.send(handle_client.encode ("UTF-8")) 
-	handle_server = clientSocket.recv (10).decode ("UTF-8")
+	client_socket.send(handle_client.encode ("UTF-8")) 
+	handle_server = client_socket.recv (10).decode ("UTF-8")
 
-	print ("Chat client connected to '" + handle_server + "' on server '" + serverName + "' on port " + str(serverPort) + "...")
+	print ("Chat client connected to '" + handle_server + "' on server '" + server_name + "' on port " + str(server_port) + "...")
 
 	# returns a tuple: the socket, and the other handle
-	return (clientSocket, handle_server)
+	return (client_socket, handle_server)
 
 
 def main ():
@@ -42,15 +42,15 @@ def main ():
 		exit(1)
 
 	# declare globals cause you're gonna need them
-	global serverName
-	global serverPort
-	global clientSocket
+	global server_name
+	global server_port
+	global client_socket
 	global handle_server
 	global handle_client
 
 	# assign host and port from args
-	serverName = sys.argv[1]
-	serverPort = int (sys.argv[2])
+	server_name = sys.argv[1]
+	server_port = int (sys.argv[2])
 
 	print ("Chat client starting ...")
 
@@ -58,10 +58,10 @@ def main ():
 	handle_client = config_user()
 
 	# connects to the server, gets socket and handle
-	(clientSocket, handle_server) = conx_user()
+	(client_socket, handle_server) = conx_user()
 
 	# run the chat client
-	run_client (clientSocket, handle_client, handle_server, 0) 
+	run_client (client_socket, handle_client, handle_server, 0) 
 
 
 # assign signal handler function
