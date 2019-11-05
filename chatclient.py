@@ -4,10 +4,11 @@
 Program: chatclient.py
 	Written by: Ava Cordero
 	Date: 10/25/2019
-	Latest:11/1/2019
+	Latest:11/5/2019
 
 Description:
 	A simple chat client that works for one pair of users.
+	See chatlib.py for utility functions.
 
 Usage: chatclient.py servername portnumber
 """
@@ -18,8 +19,11 @@ import sys
 from socket import *
 from chatlib import *
 
-
-def conx_user(): # (server_name, server_port, handle_client):
+#Function: conx_user (Connect user)
+#Description: Connects the client to the server.
+#Input: Server name and port to which to connect
+#Output: Tuple containing the client socket and server handle.
+def conx_user (server_name, server_port, handle_client):
 # try:
 	# connect to the server
 	client_socket = socket (AF_INET, SOCK_STREAM) # create TCP socket
@@ -34,19 +38,41 @@ def conx_user(): # (server_name, server_port, handle_client):
 	# returns a tuple: the socket, and the other handle
 	return (client_socket, handle_server)
 
+#Function: run_client (Run client)
+#Description: Runs and maintains the client functionality.
+#Input: Client socket, client handle, and server handle.
+#Output: None.
+# maintains the client chat functionality
+def run_client (client_socket, handle_cl, handle_srv):
+	# set prompts
+	prompt_srv = handle_srv + "> "
+	prompt_cl = handle_cl + "> "
 
+	# continuously prompt for a message until the message is "\quit"
+	while 1:
+		msg_out = send_message (client_socket, prompt_cl, 500)
+		msg_in = recv_message (client_socket, prompt_srv, 500)
+		print (msg_in)
+		
+		if msg_out == "\\quit": # if message is "\quit", 
+			print ("Connection closed...")
+			exit(0)
+
+		if msg_in == prompt_srv + "\\quit": # if message is "\quit", 
+			print ("Connection closed by '" + handle_srv + "'...")
+			exit(0)
+
+
+
+# Function: Main
+# Description: Validates arguments, then calls functions to configure the user, connect to the server, and run the chat client.
+# Input: Command line arguments.
+# Output: None.
 def main ():
 	# check for proper usage
 	if len(sys.argv) != 3:
 		print ("Error: Incorrect usage (chatclient.py servername portnumber).")
 		exit(1)
-
-	# declare globals cause you're gonna need them
-	global server_name
-	global server_port
-	global client_socket
-	global handle_server
-	global handle_client
 
 	# assign host and port from args
 	server_name = sys.argv[1]
@@ -54,14 +80,14 @@ def main ():
 
 	print ("Chat client starting ...")
 
-	# gets client user handle
-	handle_client = config_user()
+	# configure user handle w/ max 10 chars
+	handle_client = config_user(10)
 
-	# connects to the server, gets socket and handle
-	(client_socket, handle_server) = conx_user()
+	# connect to the server, get socket and handle
+	(client_socket, handle_server) = conx_user (server_name, server_port, handle_client)
 
 	# run the chat client
-	run_client (client_socket, handle_client, handle_server, 0) 
+	run_client (client_socket, handle_client, handle_server) 
 
 
 # assign signal handler function
